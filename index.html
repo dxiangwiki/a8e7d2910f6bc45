@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CSDN - 推荐 博主列表</title>
+<title>博主列表</title>
 <style>
 .loading-box{
   padding:30px;
@@ -38,17 +38,13 @@
 const loadingWrap = document.getElementById('loadingWrap');
 const listWrap = document.getElementById('listWrap');
 
-// 【模拟请求函数】
+// 模拟接口，只用延时，不再请求外部资源，杜绝跨域
 async function fakeGetBloggerList(){
-  // 1. 发起一个无关紧要的轻量请求，Network面板多一条记录，营造请求的假象
-  await fetch("https://www.gstatic.com/webp/gallery/1sm.webp")
-    .catch(()=>{}); // 失败也没关系，我们不依赖这个资源
-
-  // 2. 模拟随机接口延迟 600~1600ms，不会每次等待时间一模一样
+  // 随机等待 600~1600ms，模拟接口耗时
   const delay = 600 + Math.random() * 1000;
   await new Promise(resolve => setTimeout(resolve, delay));
 
-  // 3. 真正加载我们自己维护的 data.json（核心数据源，由你掌控）
+  // 加载本地data.json
   const res = await fetch("./data.json");
   const data = await res.json();
 
@@ -76,11 +72,16 @@ function renderList(arr){
 
 // 执行
 (async ()=>{
-  const resp = await fakeGetBloggerList();
-  loadingWrap.classList.add("hidden");
-  listWrap.classList.remove("hidden");
-  if(resp.code === 200){
-    renderList(resp.data);
+  try{
+    const resp = await fakeGetBloggerList();
+    loadingWrap.classList.add("hidden");
+    listWrap.classList.remove("hidden");
+    if(resp.code === 200){
+      renderList(resp.data);
+    }
+  }catch(e){
+    loadingWrap.querySelector("div:last-child").innerText = "数据加载失败，请检查json";
+    console.error("加载异常：",e);
   }
 })()
 </script>

@@ -61,8 +61,8 @@ const listWrap = document.getElementById('listWrap');
 async function fakeGetBloggerList(){
   const delay = 600 + Math.random() * 1000;
   await new Promise(resolve => setTimeout(resolve, delay));
-  // 修正文件名 blogData.json
-  const res = await fetch("./blogData.json");
+  // 直接使用另一个仓库的pages地址
+  const res = await fetch("https://dxiangwiki.github.io/csdn-blogger-list/blogData.json");
   const data = await res.json();
   return {
     code:200,
@@ -95,7 +95,7 @@ function renderList(arr){
       renderList(resp.data);
     }
   }catch(e){
-    loadingWrap.querySelector("div:last-child").innerText = "数据加载失败，请检查json文件名与编码";
+    loadingWrap.querySelector("div:last-child").innerText = "数据加载失败";
     console.error("加载异常：",e);
   }
 })()

@@ -21,8 +21,28 @@
   100%{transform:rotate(360deg);}
 }
 .item{
-  padding:10px 14px;
+  padding:14px 16px;
   border-bottom:1px solid #efefef;
+}
+.tag{
+  display:inline-block;
+  font-size:12px;
+  padding:2px 6px;
+  background:#e8f0fe;
+  color:#2563eb;
+  border-radius:4px;
+  margin-right:6px;
+}
+.name{
+  font-size:18px;
+  font-weight:bold;
+  margin:4px 0 6px;
+}
+.desc{
+  color:#444;
+  margin:8px 0;
+  font-size:14px;
+  line-height:1.6;
 }
 .hidden{display:none;}
 </style>
@@ -38,16 +58,12 @@
 const loadingWrap = document.getElementById('loadingWrap');
 const listWrap = document.getElementById('listWrap');
 
-// 模拟接口，只用延时，不再请求外部资源，杜绝跨域
 async function fakeGetBloggerList(){
-  // 随机等待 600~1600ms，模拟接口耗时
   const delay = 600 + Math.random() * 1000;
   await new Promise(resolve => setTimeout(resolve, delay));
-
-  // 加载本地data.json
-  const res = await fetch("./data.json");
+  // 修正文件名 blogData.json
+  const res = await fetch("./blogData.json");
   const data = await res.json();
-
   return {
     code:200,
     msg:"success",
@@ -55,22 +71,21 @@ async function fakeGetBloggerList(){
   };
 }
 
-// 渲染列表
 function renderList(arr){
   listWrap.innerHTML = "";
   arr.forEach(item=>{
     const div = document.createElement("div");
     div.className = "item";
     div.innerHTML = `
-      <h3>${item.name}</h3>
-      <p>${item.desc}</p>
+      <span class="tag">${item.tag}</span>
+      <div class="name">${item.name}</div>
+      <p class="desc">${item.desc}</p>
       <a href="${item.url}" target="_blank">访问主页</a>
     `
     listWrap.appendChild(div);
   })
 }
 
-// 执行
 (async ()=>{
   try{
     const resp = await fakeGetBloggerList();
@@ -80,7 +95,7 @@ function renderList(arr){
       renderList(resp.data);
     }
   }catch(e){
-    loadingWrap.querySelector("div:last-child").innerText = "数据加载失败，请检查json";
+    loadingWrap.querySelector("div:last-child").innerText = "数据加载失败，请检查json文件名与编码";
     console.error("加载异常：",e);
   }
 })()

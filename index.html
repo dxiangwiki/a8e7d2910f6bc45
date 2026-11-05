@@ -173,11 +173,22 @@
         const btns = document.querySelectorAll('.filter-btn');
 
         // 加载json数据
-        async function loadData() {
-            const res = await fetch('blogData.json');
-            blogList = await res.json();
-            render('all');
-        }
+ async function loadData() {
+  try {
+    // 这里是目标仓库pages的json绝对地址
+    const jsonUrl = "https://dxiangwiki.github.io/csdn-blogger-list/blogData.json";
+    const res = await fetch(jsonUrl);
+    console.log("status:", res.status);
+    if (!res.ok) {
+      throw new Error(`http ${res.status}`);
+    }
+    blogList = await res.json();
+    render('all');
+  } catch (err) {
+    console.error("加载错误：", err);
+  }
+}
+
 
         // 渲染卡片
         function render(type) {

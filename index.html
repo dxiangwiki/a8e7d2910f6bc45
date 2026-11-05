@@ -153,6 +153,7 @@
             <button class="filter-btn" data-type="cpp">C/C++底层</button>
             <button class="filter-btn" data-type="ops">运维&云原生</button>
             <button class="filter-btn" data-type="data">数据分析</button>
+            <button class="filter-btn" data-type="data-plus">大数据</button>
         </div>
         <div class="card-wrap" id="cardWrap"></div>
         <div class="warn">
@@ -161,7 +162,7 @@
             </ul>
         </div>
         <div class="nav-box">
-            <a href="https://dxiangwiki.github.io/csdn-blogger-list/info.html" class="nav-btn">📖 查看排名参考说明</a>
+            <a href="info.html" class="nav-btn">📖 查看排名参考说明</a>
         </div>
     </div>
 
@@ -170,9 +171,9 @@
         const cardWrap = document.getElementById('cardWrap');
         const btns = document.querySelectorAll('.filter-btn');
 
-        // 加载json数据（跨仓库Pages直链）
+        // 加载json数据
         async function loadData() {
-            const res = await fetch('https://dxiangwiki.github.io/csdn-blogger-list/blogData.json');
+            const res = await fetch('blogData.json');
             blogList = await res.json();
             render('all');
         }
